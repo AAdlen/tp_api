@@ -1,0 +1,12 @@
+{
+  "name": "tp_api",
+  "version": "1.0.0",
+  "description": "TP sur les APIs fait en classe",
+  "license": "ISC",
+  "author": "Maissa Adlen",
+  "type": "commonjs",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
