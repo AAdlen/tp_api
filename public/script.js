@@ -1,12 +1,18 @@
 const playerForm = document.getElementById("playerForm");
 
-function sendData() {
+async function sendData() {
 
   let id = document.getElementById("id").value;
   let username = document.getElementById("username").value;
   let userclass = document.getElementById("userclass").value;
 
-  let userarray = `{"id":${id}, "username":${username}, "userclass":${userclass}}`
+  let userarray = {
+    id: id,
+    username: username,
+    userclass: userclass
+  }
+
+  //let userarray = `{"id":${id}, "username":${username}, "userclass":${userclass}}`
 
   /*let userarray = new Map();
 
@@ -15,12 +21,19 @@ function sendData() {
   userarray.set("userclass", userclass);*/
 
 
-  fetch("/players/newplayer", {
+try {
+
+  const res = await fetch("http://localhost:3000/players/newplayer", {
     method: "POST",
-    body: userarray
+    headers : {"Content-Type": "application/json"},
+    body: JSON.stringify(userarray)
   })
-    .then(console.log(userarray))
-    .catch(err => console.error(err));
+     const data = await res.json();
+     console.log(data);
+  }
+    catch (err) {
+      console.error(err);
+    }
 }
 
 
