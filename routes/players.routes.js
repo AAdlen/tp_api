@@ -2,6 +2,7 @@ const express = require('express');
 const mysql = require("mysql2")
 const bodyParser = require('body-parser')
 const router = express.Router();
+let playerID = "";
 
 
 router.get('/', (req, res) => {
@@ -24,13 +25,16 @@ router.post('/newplayer', (req, res) => {
     password: "root",
     database: "frogue"
   });
+  
 
   DB.connect();
-
   const query = `INSERT INTO players (username, userclass) VALUES (?, ?)`;
-  DB.query(query, [newPlayer.username, newPlayer.userclass]);
-
-  res.status(201).json({ message: 'Joueur ajouté', player: newPlayer });
+  DB.query(query, [newPlayer.username, newPlayer.userclass], function(err, result, fields) {
+    if (err) throw err;
+    playerID = result.insertId;
+    res.json({message : "Vous venez de créer le personnage numéro #" + playerID + " !"});
+    console.log(playerID)
+  });
 });
 
 module.exports = router;

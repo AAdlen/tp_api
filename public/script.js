@@ -2,12 +2,10 @@ const playerForm = document.getElementById("playerForm");
 
 async function sendData() {
 
-  let id = document.getElementById("id").value;
   let username = document.getElementById("username").value;
   let userclass = document.getElementById("userclass").value;
 
   let userarray = {
-    id: id,
     username: username,
     userclass: userclass
   }
@@ -29,6 +27,7 @@ try {
     body: JSON.stringify(userarray)
   })
      const data = await res.json();
+     alert(data.message);
      console.log(data);
   }
     catch (err) {
