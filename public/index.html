@@ -1,18 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>F-ROGUE</title>
 </head>
+
 <body>
-    <form id="playerForm" >
+    <form id="playerForm">
+
         <label for="">Username</label>
-        <input type="text" value="usernameTEST" name="username" id="username">
+        <br>
+        <input type="text" placeholder="Username" name="username" id="username">
+        <br>
+        <br>
         <label for="">Class</label>
-        <input type="text" value="classTEST" name="userclass" id="userclass">
-        <input type="submit" value="Submit"/>
+        <br>
+        <select name="userclass" id="userclass" onchange="changeDescription()">
+            <option value="Knight">Knight</option>
+            <option value="Archer">Archer</option>
+            <option value="Wizard">Wizard</option>
+            <option value="Bard">Bard</option>
+            <option value="Healer">Healer</option>
+            <option value="Necromancer">Necromancer</option>
+            <option value="Assassin">Assassin</option>
+            <option value="Jester">Jester</option>
+        </select>
+        <input type="submit" value="Submit" />
+    </form>
+    <br>
+    <div>
+        <article>
+            <h3 id="classTitle">title</h3>
+            <p id="classDescription">description</p>
+            <ul id="classAttributes">
+            </ul>
+        </article>
+    </div>
+    <br>
+    <form id="deletePlayer">
+        <label for="id">ID du joueur a supprimer</label>
+        <input type="number" id="playerID">
+        
     </form>
 </body>
 <script src="script.js"></script>
+
 </html>

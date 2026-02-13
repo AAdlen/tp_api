@@ -7,23 +7,12 @@ app.use(express.static('public'));
 app.use(express.json());
 
 const playersRoutes = require('./routes/players.routes');
+const gamesRoutes = require('./routes/games.routes');
 
 app.use('/players', playersRoutes);
+app.use('/game', gamesRoutes);
 
-app.get('/status', (req, res) => {
-  res.json({
-    status: 'Running',
-    timestamp: new Date().toISOString()
-  });
-});
-
-app.get('/items/:id', (req, res) => {
-    const id = req.params.id;
-  res.json({ items: `Ceci est l'item ${id} !` });
-});
-
-///
 
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
-})
+  console.log(`Listening on port ${port}`)
+}) 
