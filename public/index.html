@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FR𓆏GUE</title>
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 <!--     <img class="image" src="img/windows-7-background-imfecqv6cnsicbx4.png">
  -->    
@@ -33,42 +35,57 @@
                     </select>
             </form>
 
-                <div class="choix">
+            <div class="choix">
 
-                </div>
+                <button class="random-button" id="random-btn">randomize!</button>
 
-                <div class="option">
-                    <button data-type="skin" class="skin" data-dir="-1">></button>
-                    <span>skin</span>
-                    <button data-type="skin" data-dir="1"><</button>
+                <div class="skin">
+                    <img id="skin" class="skin-img" alt="skin">
+                    <div class="option">
+                        <button data-type="skin" class="skin" data-dir="-1">></button>
+                        <button data-type="skin" data-dir="1"><</button>
             
+                    </div>
                 </div>
             
 
-                <div class="option">
-                    
-                        <button data-type="hairStyle" data-dir="-1">></button> <span>hair</span>
+                <div class="hair">
+                    <img id="hair" class="hair-img" alt="hair">
+                    <div class="option">
+                        <button data-type="hairStyle" data-dir="-1">></button>
                         <button data-type="hairStyle" data-dir="1"><</button>
+                    </div>
                 </div>
+                
 
-                <div class="option">
-                    <span>hair color</span>
+                <div class="hair-color">
+                    <img id="hairColor" class="haircolor-img" alt="hair color">
+                    <div class="option">
                         <button data-type="hairColor" data-dir="-1">></button>
                         <button data-type="hairColor" data-dir="1"><</button>
+                    </div>
                 </div>
+                
 
-                <div class="option">
-                    <span>T-shirt</span>
+                <div class="shirt">
+                    <img id="shirt" class="shirt-img" alt="t-shirt">
+                    <div class="option">
                         <button data-type="shirt" data-dir="-1">></button>
                         <button data-type="shirt" data-dir="1"><</button>
+                    </div>
                 </div>
+                
 
-                <div class="option">
-                    <span>pants</span>
+                <div class="pants">
+                    <img id="pants" class="pants-img" alt="pants">
+                    <div class="option">
                         <button data-type="pants" data-dir="-1">></button>
                         <button data-type="pants" data-dir="1"><</button>
+                    </div>
                 </div>
+            </div>
         </div>
+
 
 
         <div class="container">
@@ -98,4 +115,5 @@
 
 </body>
 <script src="script.js"></script>
+
 </html>
