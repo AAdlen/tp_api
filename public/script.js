@@ -1,8 +1,9 @@
 const playerForm = document.getElementById("playerForm");
 const classTitle = document.getElementById("classTitle");
 const deletePlayerForm = document.getElementById("deletePlayer");
+const moveButton = document.getElementById("moveBTN");
 const classDescription = document.getElementById("classDescription");
-const classAttributes = document.getElementById("classAttributes")
+const classAttributes = document.getElementById("classAttributes");
 
 const descriptionList = new Map();
 descriptionList.set("Knight","Legend says he is so strong no hit makes him budge, definitely not a hollow knight.")
@@ -27,7 +28,7 @@ function changeDescription(){
 
 }
 
-async function sendData() {
+async function createPlayer() {
 
   let username = document.getElementById("username").value;
   let userclass = document.getElementById("userclass").value;
@@ -45,8 +46,8 @@ try {
     body: JSON.stringify(userarray)
   })
      const data = await res.json();
-     alert(data.message);
-     console.log(data);
+     alert("Vous venez de créer le personnage numéro #" + data.id + " !");
+     createGame(data.id);
   }
     catch (err) {
       console.error(err);
@@ -71,13 +72,49 @@ try {
     }
 }
 
+async function createGame(playerID) {
+
+try {
+
+  const res = await fetch(`http://localhost:3000/games/${playerID}`, {
+    method: "POST"
+  })
+     const data = await res.json();
+     alert("Partie Créée !");
+  }
+    catch (err) {
+      console.error(err);
+    }
+}
+
+async function move(gameID) {
+
+try {
+
+  const res = await fetch(`http://localhost:3000/games/${gameID}/move`, {
+    method: "POST"
+  })
+     const data = await res.json();
+     alert("+1 floor!");
+  }
+    catch (err) {
+      console.error(err);
+    }
+}
 
 playerForm.addEventListener("submit", (event) => {
   event.preventDefault();
-  sendData();
+  createPlayer();
 })
 
 deletePlayerForm.addEventListener("submit", (event) => {
   event.preventDefault();
   deletePlayer();
 })
+
+moveButton.addEventListener("click", (event) => {
+  event.preventDefault();
+  move(1);
+})
+
+

@@ -10,7 +10,7 @@ const playersRoutes = require('./routes/players.routes');
 const gamesRoutes = require('./routes/games.routes');
 
 app.use('/players', playersRoutes);
-app.use('/game', gamesRoutes);
+app.use('/games', gamesRoutes);
 
 
 app.listen(port, () => {

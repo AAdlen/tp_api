@@ -1,0 +1,65 @@
+body{
+    display: flex;
+    height: 100%;
+    width: 100%;
+}
+
+#fenetre{
+    position: relative;
+    display: flex;
+    height: 480px;
+    width: 640px;
+    flex-direction: column;
+    left: 25%;
+    top: 15%;
+}
+
+#title{
+    display: flex;
+    height: 7%;
+    width: 100%;
+    background-color: darkblue;
+}
+
+#content{
+    display: flex;
+    height: 93%;
+    width: 100%;
+    background-color: white;
+    flex-direction: row;
+}
+
+.container{
+    display: flex;
+    width: 33.33%;
+    height: 100%;
+    flex-direction: column;
+    border: 1px solid black;
+}
+
+img{
+    object-fit: cover;
+    position: relative;
+    height: 50%;
+    width: 50%;
+    top: 20%;
+    left: 20%;
+}
+
+#className{
+    display: flex;
+    height: 15%;
+    width: 100%;
+    border: 1px solid black;
+}
+
+#classDescription{
+    display: flex;
+    height: 85%;
+    width: 100%;
+}
+
+form{
+    display: flex;
+    flex-direction: column;
+}

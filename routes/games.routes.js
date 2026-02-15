@@ -1,10 +1,12 @@
 const express = require('express');
 const router = express.Router();
 
-//const repoGame = require('../repositories/game.repo')
+//Importation 
+const repoGames = require('../repositories/game.repo')
 
-//router.post('/newfloor', repoGame.createFloor);
 
-//router.get('/')
+router.post('/:id', repoGames.createGame);
+router.get('/:id', repoGames.getGame);
+router.post('/:id/move', repoGames.move);
 
 module.exports = router;

@@ -1,8 +1,7 @@
 const express = require('express');
-const mysql = require("mysql2")
+const mysql = require("mysql2");
 
 //Creation du joueur
-
 exports.createPlayer = async function createPlayer(req, res) {
 
     const newPlayer = req.body;
@@ -23,14 +22,13 @@ exports.createPlayer = async function createPlayer(req, res) {
 
         if (err) throw err;
         playerID = result.insertId;
-        res.json({ message: "Vous venez de créer le personnage numéro #" + playerID + " !" });
+        res.json({ id: playerID });
 
     });
 
 }
 
 //Affichage du joueur depuis son ID
-
 exports.getPlayer = async function getPlayer(req, res) {
 
     const DB = mysql.createConnection({
@@ -78,7 +76,6 @@ exports.getAllPlayers = async function getAllPlayers(req, res) {
 }
 
 //Suppression du joueur avec son ID
-
 exports.deletePlayer = async function deletePlayer(req, res) {
 
     const DB = mysql.createConnection({
