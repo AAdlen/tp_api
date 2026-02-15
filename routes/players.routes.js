@@ -1,26 +1,15 @@
 const express = require('express');
 const router = express.Router();
 
-router.get('/', (req, res) => {
-  res.json({ message: 'Liste des joueurs' });
-});
+//Importation 
+const repoPlayer = require('../repositories/player.repo')
 
-router.post('/newplayer', (req, res) => {
-  const newPlayer = req.body;
-  console.log(newPlayer);
-  const DB = mysql.createConnection({
-    host: localhost,
-    user: root,
-    password: root,
-    database: frogue
-  });
 
-  DB.connect();
+router.post('/', repoPlayer.createPlayer);
+router.get('/:id', repoPlayer.getPlayer);
+router.get('/', repoPlayer.getAllPlayers);
+router.delete('/:id', repoPlayer.deletePlayer);
 
-  const query = `INSERT INTO players (username, userclass) VALUES (?, ?)`;
-  DB.query(query, [newPlayer.get("username"), newPlayer.get("userclass")]);
 
-  res.status(201).json({ message: 'Joueur ajouté', player: newPlayer });
-});
 
 module.exports = router;
