@@ -3,18 +3,99 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TEST</title>
+    <title>FR𓆏GUE</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <form id="playerForm" >
-        <label for="">ID</label>
-        <input type="text" value="1" name="id" id="id">
-        <label for="">Username</label>
-        <input type="text" value="usernameTEST" name="username" id="username">
-        <label for="">Class</label>
-        <input type="text" value="classTEST" name="userclass" id="userclass">
-        <input type="submit" value="Submit"/>
-    </form>
+<!--     <img class="image" src="img/windows-7-background-imfecqv6cnsicbx4.png">
+ -->    
+ <div class="fenetre">
+      <div class="top-panel">
+        <strong>USER</strong>
+        <button><strong>X</strong></button>
+      </div>
+      
+      <div class="content">
+        <div class="container">
+            <form action="">
+                    <label for="">Username</label>
+                    <input type="text" id="username">
+                    <label for="class">Class</label>
+                    <select name="userclass" id="userclass" onchange="changeDescription()">
+                        <option value="Knight">Knight</option>
+                        <option value="Archer">Archer</option>
+                        <option value="Wizard">Wizard</option>
+                        <option value="Bard">Bard</option>
+                        <option value="Healer">Healer</option>
+                        <option value="Necromancer">Necromancer</option>
+                        <option value="Assassin">Assassin</option>
+                        <option value="Jester">Jester</option>
+                    </select>
+            </form>
+
+                <div class="choix">
+
+                </div>
+
+                <div class="option">
+                    <button data-type="skin" class="skin" data-dir="-1">></button>
+                    <span>skin</span>
+                    <button data-type="skin" data-dir="1"><</button>
+            
+                </div>
+            
+
+                <div class="option">
+                    
+                        <button data-type="hairStyle" data-dir="-1">></button> <span>hair</span>
+                        <button data-type="hairStyle" data-dir="1"><</button>
+                </div>
+
+                <div class="option">
+                    <span>hair color</span>
+                        <button data-type="hairColor" data-dir="-1">></button>
+                        <button data-type="hairColor" data-dir="1"><</button>
+                </div>
+
+                <div class="option">
+                    <span>T-shirt</span>
+                        <button data-type="shirt" data-dir="-1">></button>
+                        <button data-type="shirt" data-dir="1"><</button>
+                </div>
+
+                <div class="option">
+                    <span>pants</span>
+                        <button data-type="pants" data-dir="-1">></button>
+                        <button data-type="pants" data-dir="1"><</button>
+                </div>
+        </div>
+
+
+        <div class="container">
+            <div class="creation">
+                <img src="https://static.wikia.nocookie.net/characterprofile/images/b/bc/Download_%282%29.png/revision/latest?cb=20200825171717"
+                    alt="">
+            </div>
+        </div>
+
+        <div class="container">
+            <div id="className">
+                    <h1>Class</h1>
+                </div>
+                <div id="classDescription">
+                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Corporis esse odio praesentium incidunt
+                        nostrum mollitia sed sunt tempora aspernatur accusantium est commodi ipsum repellendus provident
+                        deserunt autem quam cumque, sint deleniti reiciendis tenetur earum rem. Non animi voluptatem
+                        ipsam
+                        eos voluptatum nam. Omnis laboriosam sint quaerat non provident minima velit, accusantium
+                        deleniti
+                        dolore placeat dicta nihil molestiae sapiente alias possimus adipisci voluptas, ducimus
+                        inventore
+                        perferendis! Neque adipisci debitis labore sint.</p>
+                </div>
+        </div>
+</div>
+
 </body>
 <script src="script.js"></script>
 </html>

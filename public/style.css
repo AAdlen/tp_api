@@ -1,0 +1,104 @@
+head{
+    width: 0%;
+    height: 0%;
+}
+
+body{
+  margin: 0;
+  padding: 0;
+  background-image: url('img/windows-7-background-imfecqv6cnsicbx4.png');
+    background-repeat: no-repeat;
+    object-fit:cover;
+    display:block;
+    height: 100vh;
+    background-size: 100% 100%;
+
+}
+
+.fenetre {
+  position: relative;
+    display: flex;
+    height: 480px;
+    width: 640px;
+    flex-direction: column;
+    left: 25%;
+    top: 15%;
+}
+
+.top-panel {
+  background: linear-gradient(180deg,#0997ff,#0053ee 8%,#0050ee 40%,#06f 88%,#06f 93%,#005bff 95%,#003dd7 96%,#003dd7);
+  height: 25px;
+  color: white;
+  padding: 5px 0px 0px 9px;
+}
+
+button {
+  float: right;
+  background-color: #DE5227;
+  margin-right: 10px;
+  color: white;
+  font-size: 15px;
+}
+
+.content{
+    display: flex;
+    height: 93%;
+    width: 100%;
+    background-color: white;
+    flex-direction: row;
+  border-style: solid;
+  border-color: #003dd7;
+}
+
+
+.container{
+    display: flex;
+    width: 33.33%;
+    height: 100%;
+    flex-direction: column;
+    border: 1px solid black;
+}
+
+
+label {
+ display:block;
+ line-height: 2.5;
+}
+
+input {
+ padding:3px;
+  border:1px solid #F5C5C5;
+ border-radius:5px;
+ box-shadow:1px 1px 2px #C0C0C0 inset;
+ }
+
+span{
+  justify-content: center;
+}
+
+.creation{
+  height: 100%;
+    width: 100%;
+}
+
+img{
+    object-fit: cover;
+    position: relative;
+    height: 50%;
+    width: 50%;
+    top: 20%;
+    left: 20%;
+}
+
+.className{
+    display: flex;
+    height: 15%;
+    width: 100%;
+    border: 1px solid black;
+}
+
+.classDescription{
+    display: flex;
+    height: 85%;
+    width: 100%;
+}
