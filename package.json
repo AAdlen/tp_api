@@ -12,6 +12,7 @@
   "dependencies": {
     "express": "^5.2.1",
     "mysql2": "^3.17.0",
-    "nodemon": "^3.1.11"
+    "nodemon": "^3.1.11",
+    "seedrandom": "^3.0.5"
   }
 }

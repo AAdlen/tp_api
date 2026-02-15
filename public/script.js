@@ -114,7 +114,7 @@ deletePlayerForm.addEventListener("submit", (event) => {
 
 moveButton.addEventListener("click", (event) => {
   event.preventDefault();
-  move(1);
+  move(2);
 })
 
 
