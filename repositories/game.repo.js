@@ -1,6 +1,8 @@
 const express = require('express');
 const db = require('../data/db');
 const mysql = require("mysql2");
+const playerService = require('../services/players.service');
+const gameService = require('../services/games.service')
 const seedrandom = require('seedrandom');
 
 const cache = {};
@@ -44,41 +46,20 @@ exports.createGame = async function createGame(req, res) {
 }
 
 //Recuperation de la partie depuis l'ID de la partie
-exports.getGame = async function getGame(req, res) {
-
-    const gameID = req.params.id;
-    if (cache[gameID]) {
-        return res.json(cache[gameID]);
-    }
+exports.getGameById = async function getGameById(req, res) {
 
     try {
-
-        const game = await db.query(
-            `SELECT * FROM games WHERE ID = ?`,
-            [gameID]
-        );
-
-        if (!game) {
-            return res.status(404).send('Game not found');
-        }
-
-        cache[gameID] = {
-            seed: game.seed,
-            currentFloor: game.current_floor,
-            monster: game.current_monster,
-            monsterStats: {
-                hp: game.monster_hp,
-                atk: game.monster_atk,
-                def: game.monster_def
+            const game = await gameService.getGame(req.params.id);
+    
+            if (!game) {
+                return res.status(404).send("Player not found");
             }
-        };
-
-        res.send(result);
-
-    } catch (err) {
-        console.error(err);
-        res.status(500).send('DB error');
-    }
+    
+            res.json(game);
+        } catch (err) {
+            console.error(err);
+            res.status(500).send("DB error");
+        }
 }
 
 //Avancer dans la partie
@@ -104,15 +85,16 @@ exports.move = async function move(req, res) {
 }
 
 //Attaquer
+
 exports.attack = async function attack(req, res) {
 
     gameID = req.params.id;
     const monster = await getMonster(gameID);
+    const game = await gameService.getGame(gameID);
+    const player = await playerService.getPlayer(game.player_id);
 
-    console.log(monster.name);
-    console.log(monster.hp);
-    console.log(monster.atk);
-    console.log(monster.def);
+    console.log(player);
+    console.log(monster);
 
 }
 

@@ -6,7 +6,7 @@ const repoGames = require('../repositories/game.repo')
 
 
 router.post('/:id', repoGames.createGame);
-router.get('/:id', repoGames.getGame);
+router.get('/:id', repoGames.getGameById);
 router.post('/:id/move', repoGames.move);
 router.post('/:id/attack', repoGames.attack);
 

@@ -6,10 +6,8 @@ const playerRepo = require('../repositories/player.repo')
 
 
 router.post('/', playerRepo.createPlayer);
-router.get('/:id', playerRepo.getPlayer);
+router.get('/:id', playerRepo.getPlayerById);
 router.get('/', playerRepo.getAllPlayers);
 router.delete('/:id', playerRepo.deletePlayer);
-
-
 
 module.exports = router;

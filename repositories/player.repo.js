@@ -1,6 +1,7 @@
 const express = require('express');
 const db = require('../data/db');
 const mysql = require("mysql2");
+const playerService = require('../services/players.service');
 
 //Creation du joueur
 exports.createPlayer = async function createPlayer(req, res) {
@@ -22,20 +23,16 @@ exports.createPlayer = async function createPlayer(req, res) {
 }
 
 //Affichage du joueur depuis son ID
-exports.getPlayer = async function getPlayer(req, res) {
+exports.getPlayerById = async function getPlayerById(req, res) {
 
     try {
-        const player = await db.getOne(
-            'SELECT * FROM players WHERE ID = ?',
-            [req.params.id]
-        );
+        const player = await playerService.getPlayer(req.params.id);
 
         if (!player) {
             return res.status(404).send("Player not found");
         }
 
         res.json(player);
-
     } catch (err) {
         console.error(err);
         res.status(500).send("DB error");
