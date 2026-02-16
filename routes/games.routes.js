@@ -8,5 +8,6 @@ const repoGames = require('../repositories/game.repo')
 router.post('/:id', repoGames.createGame);
 router.get('/:id', repoGames.getGame);
 router.post('/:id/move', repoGames.move);
+router.post('/:id/attack', repoGames.attack);
 
 module.exports = router;

@@ -1,53 +1,45 @@
 const express = require('express');
+const db = require('../data/db');
 const mysql = require("mysql2");
 
 //Creation du joueur
 exports.createPlayer = async function createPlayer(req, res) {
 
-    const newPlayer = req.body;
+    try {
+        const newPlayer = req.body;
 
-    const DB = mysql.createConnection({
-        host: "localhost",
-        user: "root",
-        password: "root",
-        database: "frogue"
-    });
+        const result = await db.query(
+            'INSERT INTO players (username, userclass) VALUES (?, ?)',
+            [newPlayer.username, newPlayer.userclass]
+        );
 
+        res.json({ id: result.insertId });
 
-    DB.connect();
-
-    const query = `INSERT INTO players (username, userclass) VALUES (?, ?)`;
-
-    DB.query(query, [newPlayer.username, newPlayer.userclass], function (err, result, fields) {
-
-        if (err) throw err;
-        playerID = result.insertId;
-        res.json({ id: playerID });
-
-    });
-
+    } catch (err) {
+        console.error(err);
+        res.status(500).send("DB error");
+    }
 }
 
 //Affichage du joueur depuis son ID
 exports.getPlayer = async function getPlayer(req, res) {
 
-    const DB = mysql.createConnection({
-        host: "localhost",
-        user: "root",
-        password: "root",
-        database: "frogue"
-    });
+    try {
+        const player = await db.getOne(
+            'SELECT * FROM players WHERE ID = ?',
+            [req.params.id]
+        );
 
+        if (!player) {
+            return res.status(404).send("Player not found");
+        }
 
-    DB.connect();
+        res.json(player);
 
-    const query = `SELECT * FROM players WHERE ID = ?`;
-
-    DB.query(query, [req.params.id], function (err, result, fields) {
-
-        if (err) throw err;
-        res.send(result);
-    }); 
+    } catch (err) {
+        console.error(err);
+        res.status(500).send("DB error");
+    }
 
 }
 
@@ -55,59 +47,45 @@ exports.getPlayer = async function getPlayer(req, res) {
 //Affichage de tous les joueurs
 exports.getAllPlayers = async function getAllPlayers(req, res) {
 
-    const DB = mysql.createConnection({
-        host: "localhost",
-        user: "root",
-        password: "root",
-        database: "frogue"
-    });
+    try {
+        const players = await db.query('SELECT * FROM players');
+        res.json(players);
 
-
-    DB.connect();
-
-    const query = `SELECT * FROM players`;
-
-    DB.query(query, function (err, result, fields) {
-
-        if (err) throw err;
-        res.send(result);
-    }); 
-
+    } catch (err) {
+        console.error(err);
+        res.status(500).send("DB error");
+    }
 }
 
 //Suppression du joueur avec son ID
 exports.deletePlayer = async function deletePlayer(req, res) {
 
-    const DB = mysql.createConnection({
-        host: "localhost",
-        user: "root",
-        password: "root",
-        database: "frogue"
-    });
+    try {
+        const playerID = req.params.id;
 
+        await db.query(`
+            UPDATE players
+            SET
+                username = 'deleted_user',
+                avatar = '',
+                maxhp = 0,
+                hp = 0,
+                str = 0,
+                \`int\` = 0,
+                def = 0,
+                speed = 0,
+                luck = 0,
+                deleted = 'yes'
+            WHERE ID = ?
+        `, [playerID]);
 
-    DB.connect();
+        res.json({
+            message: `Vous venez de supprimer le personnage numéro #${playerID} !`
+        });
 
-    const query = `UPDATE players
-    SET
-     username = 'deleted_user',
-     avatar = '',
-     maxhp = 0,
-     hp = 0,
-     str = 0,
-     \`int\` = 0,
-     def = 0,
-     speed = 0,
-     luck = 0,
-     deleted = 'yes'
-    WHERE ID = ?`;
-
-    DB.query(query, [req.params.id], function (err, result, fields) {
-
-        if (err) throw err;
-        playerID = req.params.id;
-        res.json({ message: "Vous venez de supprimer le personnage numéro #" + playerID + " !" });
-
-    });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send("DB error");
+    }
 
 }

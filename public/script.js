@@ -2,6 +2,7 @@ const playerForm = document.getElementById("playerForm");
 const classTitle = document.getElementById("classTitle");
 const deletePlayerForm = document.getElementById("deletePlayer");
 const moveButton = document.getElementById("moveBTN");
+const attackButton = document.getElementById("attackBTN");
 const classDescription = document.getElementById("classDescription");
 const classAttributes = document.getElementById("classAttributes");
 
@@ -95,7 +96,20 @@ try {
     method: "POST"
   })
      const data = await res.json();
-     alert("+1 floor!");
+  }
+    catch (err) {
+      console.error(err);
+    }
+}
+
+async function attack(gameID) {
+
+try {
+
+  const res = await fetch(`http://localhost:3000/games/${gameID}/attack`, {
+    method: "POST"
+  })
+     const data = await res.json();
   }
     catch (err) {
       console.error(err);
@@ -115,6 +129,11 @@ deletePlayerForm.addEventListener("submit", (event) => {
 moveButton.addEventListener("click", (event) => {
   event.preventDefault();
   move(2);
+})
+
+attackButton.addEventListener("click", (event) => {
+  event.preventDefault();
+  attack(2);
 })
 
 

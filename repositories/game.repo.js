@@ -1,6 +1,16 @@
 const express = require('express');
+const db = require('../data/db');
 const mysql = require("mysql2");
 const seedrandom = require('seedrandom');
+
+const cache = {};
+
+function getCache(gameID) {
+    if (!cache[gameID]) {
+        cache[gameID] = {};
+    }
+    return cache[gameID];
+}
 
 //Creation de la partie avec l'ID du joueur
 
@@ -8,236 +18,178 @@ exports.createGame = async function createGame(req, res) {
 
     seed = Math.round(Math.random() * 1000000000000)
 
-    const DB = mysql.createConnection({
-        host: "localhost",
-        user: "root",
-        password: "root",
-        database: "frogue"
-    });
+    try {
 
+        const result = await db.query(
+            'INSERT INTO games (player_id, seed) VALUES (?, ?)',
+            [req.params.id, seed]
+        );
 
-    DB.connect();
+        const gameID = result.insertId;
 
-    const query = `INSERT INTO games (player_id, seed) VALUES (?, ?)`;
+        cache[gameID] = {
+            seed: seed,
+            currentFloor: 0,
+            monster: 'none',
+            monsterStats: null
+        };
 
-    DB.query(query, [req.params.id, seed], function (err, result, fields) {
-
-        if (err) throw err;
-        gameID = result.insertId;
         res.json({ id: gameID });
 
-    });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('DB error');
+    }
 
 }
 
 //Recuperation de la partie depuis l'ID de la partie
 exports.getGame = async function getGame(req, res) {
 
-    const DB = mysql.createConnection({
-        host: "localhost",
-        user: "root",
-        password: "root",
-        database: "frogue"
-    });
+    const gameID = req.params.id;
+    if (cache[gameID]) {
+        return res.json(cache[gameID]);
+    }
 
+    try {
 
-    DB.connect();
+        const game = await db.query(
+            `SELECT * FROM games WHERE ID = ?`,
+            [gameID]
+        );
 
-    const query = `SELECT * FROM games WHERE ID = ?`;
+        if (!game) {
+            return res.status(404).send('Game not found');
+        }
 
-    DB.query(query, [req.params.id], function (err, result, fields) {
+        cache[gameID] = {
+            seed: game.seed,
+            currentFloor: game.current_floor,
+            monster: game.current_monster,
+            monsterStats: {
+                hp: game.monster_hp,
+                atk: game.monster_atk,
+                def: game.monster_def
+            }
+        };
 
-        if (err) throw err;
         res.send(result);
-    });
 
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('DB error');
+    }
 }
 
 //Avancer dans la partie
 
 exports.move = async function move(req, res) {
 
-    gameID = req.params.id;
+    const gameID = req.params.id;
     const currentFloor = await getCurrentFloor(gameID);
-    generateNextFloor(gameID, currentFloor);
+    await generateNextFloor(gameID, currentFloor);
     console.log(await getMonster(gameID));
 
+    try {
 
-    const DB = mysql.createConnection({
-        host: "localhost",
-        user: "root",
-        password: "root",
-        database: "frogue"
-    });
+        const newFloor = currentFloor + 1;
+        await db.query('UPDATE games SET current_floor = ? WHERE ID = ?', [newFloor, gameID]);
 
+    } catch (err) {
 
-    DB.connect();
+        console.error(err);
+        res.status(500).send('DB error');
 
-    const query = `UPDATE games SET current_floor = ? WHERE ID = ?`;
-
-    DB.query(query, [currentFloor + 1, gameID], function (err, result, fields) {
-
-        if (err) throw err;
-
-    });
-
+    }
 }
 
 //Attaquer
 exports.attack = async function attack(req, res) {
 
     gameID = req.params.id;
-    const currentMonster = getMonster(gameID);
+    const monster = await getMonster(gameID);
 
-    
-
-    const DB = mysql.createConnection({
-        host: "localhost",
-        user: "root",
-        password: "root",
-        database: "frogue"
-    });
-
-
-    DB.connect();
-
-    const query = `UPDATE games SET current_floor = ? WHERE ID = ?`;
-
-    DB.query(query, [currentFloor + 1, gameID], function (err, result, fields) {
-
-        if (err) throw err;
-
-    });
+    console.log(monster.name);
+    console.log(monster.hp);
+    console.log(monster.atk);
+    console.log(monster.def);
 
 }
 
-//Verifier l'étage actuel du joueur
+//Verifications :
 
-async function getCurrentFloor(id) {
+async function getCurrentFloor(gameID) {
 
-    return new Promise((resolve, reject) => {
+    const cache = getCache(gameID);
+    if (cache.currentFloor !== undefined) {
+        return cache.currentFloor;
+    }
 
-        const DB = mysql.createConnection({
-            host: "localhost",
-            user: "root",
-            password: "root",
-            database: "frogue"
-        });
-
-
-        DB.connect();
-
-        const query = `SELECT current_floor FROM games WHERE ID = ?`;
-
-        DB.query(query, [id], function (err, result, fields) {
-
-            if (err) {
-                reject(err);
-                return;
-            }
-            resolve(result[0].current_floor);
-
-        });
-    });
+    const result = await db.getOne('SELECT current_floor FROM games WHERE ID = ?', [gameID]);
+    return result.current_floor;
 }
 
-async function getSeed(id) {
+async function getSeed(gameID) {
+    const cache = getCache(gameID);
+    if (cache.seed !== undefined) {
+        return cache.seed;
+    }
 
-    return new Promise((resolve, reject) => {
+    const result = await db.getOne('SELECT seed FROM games WHERE ID = ?', [gameID]);
+    return result.seed;
 
-        const DB = mysql.createConnection({
-            host: "localhost",
-            user: "root",
-            password: "root",
-            database: "frogue"
-        });
-
-
-        DB.connect();
-
-        const query = `SELECT seed FROM games WHERE ID = ?`;
-
-        DB.query(query, [id], function (err, result, fields) {
-
-            if (err) {
-                reject(err);
-                return;
-            }
-            resolve(result[0].seed);
-
-        });
-    });
 }
 
-async function generateNextFloor(id, floor) {
+async function generateNextFloor(gameID, floor) {
 
-    const seed = await getSeed(id);
+    const seed = await getSeed(gameID);
 
     const rng = seedrandom(seed * floor);
     const roll = (rng() * 100)
-    console.log(roll);
-    
+
     let monsterCount = 3
 
-    if(roll>50){
-        generateMonster(id,((Math.round(roll)%monsterCount)+1),floor);
+    if (roll > 50) {
+        generateMonster(gameID, ((Math.round(roll) % monsterCount) + 1), floor);
     } else {
-        generateMonster(id,0,floor);
+        generateMonster(gameID, 0, floor);
     }
 
 }
 
 async function generateMonster(gameID, monsterID, floor) {
 
-    console.log(monsterID);
-    let monster_list = ["none","zombie","skeleton","dragon"];
+    let monster_list = ["none", "zombie", "skeleton", "dragon"];
     let monster = monster_list[monsterID];
-    
 
-    const DB = mysql.createConnection({
-        host: "localhost",
-        user: "root",
-        password: "root",
-        database: "frogue"
-    });
+    const monsterStats = {
+        hp: 1,
+        atk: 1,
+        def: 1
+    }
 
+    const cache = getCache(gameID);
+    cache.monster = monster;
+    cache.monsterStats = monsterStats;
 
-    DB.connect();
-
-    const query = `UPDATE games SET current_monster = ? WHERE ID = ?`;
-
-    DB.query(query, [monster, gameID], function (err, result, fields) {
-
-        if (err) throw err;
-
-    });
-
+    await db.query(
+        'UPDATE games SET current_monster = ?, monster_hp = ?, monster_atk = ?, monster_def = ? WHERE ID = ?',
+        [monster, monsterStats.hp, monsterStats.atk, monsterStats.def, gameID]
+    );
 }
 
-async function getMonster(id) {
+async function getMonster(gameID) {
 
-    return new Promise((resolve, reject) => {
+    const monster = await db.getOne(`SELECT current_monster, monster_hp, monster_atk, monster_def FROM games WHERE ID = ?`, [gameID]);
 
-        const DB = mysql.createConnection({
-            host: "localhost",
-            user: "root",
-            password: "root",
-            database: "frogue"
-        });
+    if (!monster) {
+        throw new Error("Game not found");
+    }
 
-
-        DB.connect();
-
-        const query = `SELECT current_monster, monster_hp, monster_atk, monster_def FROM games WHERE ID = ?`;
-
-        DB.query(query, [id], function (err, result, fields) {
-
-            if (err) {
-                reject(err);
-                return;
-            }
-            resolve([result[0].current_monster, result[0].monster_hp, result[0].monster_atk, result[0].monster_def]);
-
-        });
-    });
-}
+    return {
+        name: monster.current_monster,
+        hp: monster.monster_hp,
+        atk: monster.monster_atk,
+        def: monster.monster_def
+    };
+};

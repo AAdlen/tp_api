@@ -2,13 +2,13 @@ const express = require('express');
 const router = express.Router();
 
 //Importation 
-const repoPlayer = require('../repositories/player.repo')
+const playerRepo = require('../repositories/player.repo')
 
 
-router.post('/', repoPlayer.createPlayer);
-router.get('/:id', repoPlayer.getPlayer);
-router.get('/', repoPlayer.getAllPlayers);
-router.delete('/:id', repoPlayer.deletePlayer);
+router.post('/', playerRepo.createPlayer);
+router.get('/:id', playerRepo.getPlayer);
+router.get('/', playerRepo.getAllPlayers);
+router.delete('/:id', playerRepo.deletePlayer);
 
 
 
