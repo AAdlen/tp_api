@@ -1,0 +1,145 @@
+head{
+    width: 0%;
+    height: 0%;
+}
+
+body{
+  margin: 0;
+  padding: 0;
+  background-image: url('img/windows-7-background-imfecqv6cnsicbx4.png');
+    background-repeat: no-repeat;
+    object-fit:cover;
+    display:block;
+    height: 100vh;
+    background-size: 100% 100%;
+
+}
+
+.fenetre {
+  position: relative;
+    display: flex;
+    height: 480px;
+    width: 640px;
+    flex-direction: column;
+    left: 25%;
+    top: 15%;
+}
+
+.top-panel {
+  background: linear-gradient(180deg,#0997ff,#0053ee 8%,#0050ee 40%,#06f 88%,#06f 93%,#005bff 95%,#003dd7 96%,#003dd7);
+  height: 25px;
+  color: white;
+  padding: 5px 0px 0px 9px;
+}
+
+button {
+  float: right;
+  background-color: #DE5227;
+  margin-right: 10px;
+  color: white;
+  font-size: 15px;
+}
+
+.content{
+    display: flex;
+    height: 93%;
+    width: 100%;
+    background-color: white;
+    flex-direction: row;
+  border-style: solid;
+  border-color: #003dd7;
+}
+
+
+.container{
+    display: flex;
+    width: 33.33%;
+    height: 100%;
+    flex-direction: column;
+    border: 1px solid black;
+    line-height: 2.5;
+}
+
+
+
+.creation{
+  height: 100%;
+    width: 100%;
+}
+
+img{
+    object-fit: cover;
+    position: relative;
+    height: 50%;
+    width: 50%;
+    top: 20%;
+    left: 20%;
+}
+
+
+.health-bar-container {
+	position: relative;
+	display: flex;
+	flex-flow: row nowrap;
+
+	margin: 4rem auto;
+
+	width: 13.5%;
+    margin-right: 30%;
+    margin-left: 810px;
+	height: 2.5rem;
+	border: 4px solid black;
+	border-radius: 0.5rem;
+	box-shadow: 0 0 1rem black;
+
+    .health-bar-label {
+		position: absolute;
+		z-index: 10;
+		top: 50%;
+		left: 50%;
+		translate: -50% -50%;
+
+		font-weight: bold;
+		color: white;
+		text-shadow: 0 0 0.5rem black;
+    }
+
+	.health-bar-value {
+		position: relative;
+
+		width: calc(100% * var(--bar-value, 50) / var(--bar-value-max, 100));
+		height: 100%;
+
+		background: linear-gradient(0deg, #771a1a, #d52825, #ee5311, #d52825);
+		border-radius: 0.25rem;
+
+		&.--damaged {
+			border-radius: 0.25rem 0 0 0.25rem;
+		}
+
+		.health-bar-tip {
+			position: absolute;
+			z-index: 5;
+			top: 50%;
+			right: 0;
+			translate: 0 -50%;
+
+			width: 2px;
+			height: 100%;
+			background-color: red;
+			box-shadow: 0 0 1rem 0.5rem red;
+
+			opacity: 0;
+		}
+	}
+
+	.health-bar-damage {
+		position: absolute;
+		left: calc(100% * var(--bar-offset, 100 - 10) / var(--bar-value-max, 100));
+		width: calc(100% * var(--bar-value, 10) / var(--bar-value-max, 100));
+		height: 100%;
+
+		background-color: white;
+		box-shadow: 0 0 0.5rem white;
+	}
+}

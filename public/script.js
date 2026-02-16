@@ -117,4 +117,8 @@ moveButton.addEventListener("click", (event) => {
   move(1);
 })
 
+document.getElementById("random-btn").addEventListener("click", () => {
+ console.log("Randomize button clicked!");
+});
+
 

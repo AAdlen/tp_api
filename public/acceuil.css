@@ -1,0 +1,21 @@
+head{
+    width: 0%;
+    height: 0%;
+}
+
+body{
+  margin: 0;
+  padding: 0;
+  background-image: url('img/windows-7-background-imfecqv6cnsicbx4.png');
+    background-repeat: no-repeat;
+    object-fit:cover;
+    display:block;
+    height: 100vh;
+    background-size: 100% 100%;
+
+}
+
+h1{
+    text-align: center;
+    align-items: center;
+}
