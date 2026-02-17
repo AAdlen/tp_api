@@ -10,8 +10,8 @@ exports.createPlayer = async function createPlayer(req, res) {
         const newPlayer = req.body;
 
         const result = await db.query(
-            'INSERT INTO players (username, userclass) VALUES (?, ?)',
-            [newPlayer.username, newPlayer.userclass]
+            'INSERT INTO players (username, userclass, maxhp, hp, str, `int`, def, speed, luck) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
+            [newPlayer.username, newPlayer.userclass, newPlayer.hp, newPlayer.hp, newPlayer.str, newPlayer.int, newPlayer.def, newPlayer.speed, newPlayer.luck]
         );
 
         res.json({ id: result.insertId });

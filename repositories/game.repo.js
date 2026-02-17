@@ -69,12 +69,13 @@ exports.move = async function move(req, res) {
     const gameID = req.params.id;
     const currentFloor = await getCurrentFloor(gameID);
     await generateNextFloor(gameID, currentFloor);
-    console.log(await getMonster(gameID));
+    const nextMonster = await getMonster(gameID)
 
     try {
 
         const newFloor = currentFloor + 1;
         await db.query('UPDATE games SET current_floor = ? WHERE ID = ?', [newFloor, gameID]);
+        res.json({ monster: nextMonster });
 
     } catch (err) {
 
@@ -141,7 +142,7 @@ async function generateNextFloor(gameID, floor) {
 
 async function generateMonster(gameID, monsterID, floor) {
 
-    let monster_list = ["none", "zombie", "skeleton", "dragon"];
+    let monster_list = ["Empty", "Zombie", "Skeleton", "Dragon"];
     let monster = monster_list[monsterID];
 
     const monsterStats = {

@@ -8,10 +8,14 @@ app.use(express.json());
 
 const playersRoutes = require('./routes/players.routes');
 const gamesRoutes = require('./routes/games.routes');
+const { classes } = require('./data/classes');
+
+app.get("/classes", (req, res) => {
+    res.json(classes);
+});
 
 app.use('/players', playersRoutes);
 app.use('/games', gamesRoutes);
-
 
 app.listen(port, () => {
   console.log(`Listening on port ${port}`)

@@ -4,53 +4,92 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Jacquard+12&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
     <title>F-ROGUE</title>
 </head>
 
 <body>
-    <form id="playerForm">
+    <section id="fenetre">
+        <section id="title">
+            <div id="title-and-icon">
+                <img src="img/frogue.png">
+                <h3>Frogue</h3>
+            </div>
+            
+            <button id="cross">X</button>
+        </section>
+        <section id="content">
+            <section class="container" id="firstcontainer">
+                <div id="creation">
+                    <form id="playerForm">
+                        <label for="">Username</label>
+                        <br>
+                        <input type="text" placeholder="Username" name="username" id="username">
+                        <br>
+                        <br>
+                        <label for="">Class</label>
+                        <br>
+                        <select name="userclass" id="userclass" onchange="changeDescription()">
+                            <option value="Knight">Knight</option>
+                            <option value="Archer">Archer</option>
+                            <option value="Wizard">Wizard</option>
+                            <option value="Bard">Bard</option>
+                            <option value="Healer">Healer</option>
+                            <option value="Necromancer">Necromancer</option>
+                            <option value="Assassin">Assassin</option>
+                            <option value="Jester">Jester</option>
+                        </select>
+                        <input type="submit" value="Create!" />
+                    </form>
+                </div>
 
-        <label for="">Username</label>
-        <br>
-        <input type="text" placeholder="Username" name="username" id="username">
-        <br>
-        <br>
-        <label for="">Class</label>
-        <br>
-        <select name="userclass" id="userclass" onchange="changeDescription()">
-            <option value="Knight">Knight</option>
-            <option value="Archer">Archer</option>
-            <option value="Wizard">Wizard</option>
-            <option value="Bard">Bard</option>
-            <option value="Healer">Healer</option>
-            <option value="Necromancer">Necromancer</option>
-            <option value="Assassin">Assassin</option>
-            <option value="Jester">Jester</option>
-        </select>
-        <input type="submit" value="Submit" />
-    </form>
-    <br>
-    <div>
-        <article>
-            <h3 id="classTitle">title</h3>
-            <p id="classDescription">description</p>
-            <ul id="classAttributes">
-            </ul>
-        </article>
-    </div>
-    <br>
-    <form id="deletePlayer">
-        <label for="id">ID du joueur a supprimer</label>
-        <input type="number" id="playerID">
+                <div id="deletion">
+                    <form id="deletePlayer">
+                        <label for="id">Enter a player ID to delete</label>
+                        <input type="number" id="playerID">
+                        <input type="submit" value="Delete!" id="">
 
-    </form>
-    <button id="moveBTN">
-        move
-    </button>
+                    </form>
+                </div>
+            </section>
+            <section class="container" id="secondcontainer">
+                <div id="roomTitle">
+                    <h2 id="monsterName"></h2>
+                </div>
+                <div id="roomImage">
+                    <img src="img/slime1.png" onclick="hurtSprite()" id="monsterImage">
+                </div>
+                <div id="playerHP">
 
-    <button id="attackBTN">
-        attack
-    </button>
+                </div>
+                <div id="actions">
+                    <button id="moveBTN" class="actionbutton">
+                        Move
+                    </button>
+                    <button id="attackBTN" class="actionbutton">
+                        Attack
+                    </button>
+                </div>
+
+            </section>
+            <section class="container">
+                <div>
+                    <article>
+                        <h3 id="classTitle"></h3>
+                        <br>
+                        <p id="classDescription"></p>
+                        <br>
+                        <ul id="classAttributes">
+
+                        </ul>
+                    </article>
+                </div>
+            </section>
+        </section>
+    </section>
 </body>
 <script src="script.js"></script>
 
