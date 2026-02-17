@@ -10,13 +10,33 @@ async function loadClasses() {
   try {
     const res = await fetch("/classes");
     classes = await res.json();
-    changeDescription();
   } catch (err) {
     console.error("Error loading classes:", err);
   }
 }
 
-function changeDescription() {
+async function loadPlayerFromGame(gameID) {
+  try {
+    const res = await fetch(`/players/${gameID}`);
+    const userData = await res.json();
+    return userData;
+  } catch (err) {
+    console.error("Error loading classes:", err);
+  }
+}
+
+async function loadGame(gameID) {
+  try {
+    const res = await fetch(`/games/${gameID}`);
+    const gameData = await res.json();
+    const userData = await loadPlayerFromGame(gameID);
+    changeDescriptionGame(gameData, userData);
+  } catch (err) {
+    console.error("Error loading classes:", err);
+  }
+}
+
+function changeDescriptionClasses() {
 
   const userclass = document.getElementById("userclass").value;
   const classData = classes[userclass];
@@ -29,6 +49,23 @@ function changeDescription() {
 
   for (const stat in classData.stats) {
     attrList.innerHTML += `<li>${stat.toUpperCase()} : ${classData.stats[stat]}</li>`;
+  }
+
+}
+
+function changeDescriptionGame(gameData, playerData) {
+
+  console.log(gameData);
+  console.log(playerData);
+
+  document.getElementById("classTitle").innerHTML = playerData.username + " - " + playerData.userclass;
+  document.getElementById("classDescription").innerHTML = "";
+
+  const attrList = document.getElementById("classAttributes");
+  attrList.innerHTML = "";
+
+  for (const stat in playerData) {
+    attrList.innerHTML += `<li>${stat.toUpperCase()} : ${playerData[stat]}</li>`;
   }
 
 }
@@ -93,7 +130,8 @@ async function createGame(playerID) {
       method: "POST"
     })
     const data = await res.json();
-    alert("Partie Créée !");
+    localStorage.setItem("currentGameID", data.id);
+    loadGame(data.id);
   }
   catch (err) {
     console.error(err);
@@ -161,8 +199,11 @@ function fineSprite(){
   document.getElementById("monsterImage").src = "img/slime1.png";
 }
 
-if(localStorage.getItem("currentGame")!=null){
+loadClasses();
 
+if(localStorage.getItem("currentGameID")!=null){
+  const currentGameID = localStorage.getItem("currentGameID");
+  loadGame(currentGameID);
 } else {
-  loadClasses();
+  changeDescriptionClasses();
 }
