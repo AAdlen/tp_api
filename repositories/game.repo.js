@@ -32,7 +32,7 @@ exports.createGame = async function createGame(req, res) {
         cache[gameID] = {
             seed: seed,
             currentFloor: 0,
-            monster: 'none',
+            monster: 0,
             monsterStats: null,
             lastAction: 0
         };
@@ -77,7 +77,21 @@ exports.move = async function move(req, res) {
 
         const newFloor = currentFloor + 1;
         await db.query('UPDATE games SET current_floor = ? WHERE ID = ?', [newFloor, gameID]);
+        if (newFloor==101){
+            try {
+
+                await db.query('UPDATE games SET status = ? WHERE ID = ?', ["won", gameID]);
+                res.json({ victory: "true" });
+
+            } catch (err) {
+
+                console.error(err);
+                res.status(500).send('DB error');
+
+            }
+    }
         res.json({ monster: nextMonster });
+
 
     } catch (err) {
 
@@ -97,26 +111,78 @@ exports.attack = async function attack(req, res) {
     const game = await gameService.getGame(gameID);
     const player = await playerService.getPlayer(game.player_id);
 
-    console.log(player);
-    console.log(monster);
+    let damage = (player.str + player.int) - monster.def;
 
-    const damage = player.str + player.int;
+    if (damage < 0) {
+        damage = 0;
+    }
 
     if (damage >= monster.hp) {
+        
+        let heal = player.hp + Math.round(15 + (game.current_floor*0.07))
+
+        if(heal>player.maxhp){  
+            heal = player.maxhp;
+        }
+
+        try {
+
+                await db.query('UPDATE players SET hp = ? WHERE ID = ?', [heal, gameID]);
+
+            } catch (err) {
+
+                console.error(err);
+                res.status(500).send('DB error');
+
+            }
+
         res.json({
             monster: "killed"
         });
     } else {
         try {
 
-            await db.query('UPDATE games SET monster_hp = ? WHERE ID = ?', [((monster.hp)-(damage)), gameID]);
-            res.json({ damageDealt: damage });
+            await db.query('UPDATE games SET monster_hp = ? WHERE ID = ?', [((monster.hp) - (damage)), gameID]);
 
         } catch (err) {
 
             console.error(err);
             res.status(500).send('DB error');
 
+        }
+
+        let monsterDamage = monster.atk - player.def;
+
+        if (monsterDamage < 0) {
+            monsterDamage = 0;
+        }
+
+        if (monsterDamage > player.hp) {
+            try {
+
+                await db.query('UPDATE games SET status = ? WHERE ID = ?', ["died", gameID]);
+
+            } catch (err) {
+
+                console.error(err);
+                res.status(500).send('DB error');
+
+            }
+            res.json({ player: "killed" });
+
+        } else {
+
+            try {
+
+                await db.query('UPDATE players SET hp = ? WHERE ID = ?', [((player.hp) - (monsterDamage)), gameID]);
+                res.json({ monsterDamageDealt: damage });
+
+            } catch (err) {
+
+                console.error(err);
+                res.status(500).send('DB error');
+
+            }
         }
     }
 
@@ -127,11 +193,6 @@ exports.attack = async function attack(req, res) {
 //Verifications :
 
 async function getCurrentFloor(gameID) {
-
-    const cache = getCache(gameID);
-    if (cache.currentFloor !== undefined) {
-        return cache.currentFloor;
-    }
 
     const result = await db.getOne('SELECT current_floor FROM games WHERE ID = ?', [gameID]);
     return result.current_floor;
@@ -175,7 +236,7 @@ async function generateMonster(gameID, monsterID, floor) {
 
     await db.query(
         'UPDATE games SET current_monster = ?, monster_hp = ?, monster_atk = ?, monster_def = ? WHERE ID = ?',
-        [monster.id, monster.hp, monster.atk, monster.def, gameID]
+        [monster.id, (monster.hp + Math.round(floor * 0.2)), (monster.atk + Math.round(floor * 0.1)), (monster.def + Math.round(floor * 0.05)), gameID]
     );
 }
 

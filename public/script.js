@@ -44,6 +44,8 @@ async function loadClasses() {
   } catch (err) {
     console.error("Error loading classes:", err);
   }
+
+  changeDescriptionClasses();
 }
 
 async function loadMonsterFromGame(gameID) {
@@ -87,6 +89,7 @@ async function loadGame(gameID) {
 function changeDescriptionClasses() {
 
   const userclass = document.getElementById("userclass").value;
+
   const classData = classes[userclass];
 
   document.getElementById("classTitle").innerHTML = userclass;
@@ -116,10 +119,8 @@ function changeDescriptionGame(gameData, playerData, monsterData) {
 
   document.getElementById("classTitle").innerHTML = playerData.username + " - " + playerData.userclass;
   document.getElementById("classDescription").innerHTML = "Player ID : " + playerData.id;
+  document.getElementById("classAttributes").innerHTML = "HP : " + playerData.hp + " | DMG : " + (playerData.str+playerData.int) + " | DEF : " + playerData.def;
   document.getElementById("classImage").innerHTML = "<img src='./img/classes-img/" + (playerData.userclass).toLowerCase() + ".png' width='240px' height='306px'>";
-
-  const attrList = document.getElementById("classAttributes");
-  attrList.innerHTML = "";
 
   document.getElementById("currentMonsterName").innerHTML = "Floor " + gameData.current_floor + " - " + monsterData.name;
 
@@ -182,8 +183,6 @@ async function deletePlayer() {
       method: "DELETE",
     })
     const data = await res.json();
-    /*alert(data.message);
-    console.log(data);*/
   }
   catch (err) {
     console.error(err);
@@ -242,6 +241,10 @@ async function move(gameID) {
       method: "POST"
     })
     const data = await res.json();
+    console.log(data.victory);
+    if(data.victory=="true"){
+      alert("YOU WON! CONGRATS! (You can still keep playing this run until you die btw)")
+    }
     loadGame(gameID);
   }
   catch (err) {
@@ -259,8 +262,12 @@ async function attack(gameID) {
     data = await res.json()
     if(data.monster == "killed"){
       move(gameID);
+      loadGame(gameID)
     }
-    loadGame(gameID)
+    if(data.player == "killed"){
+      alert("You died! Better luck next time!");
+      endGame(gameID);
+    }
   }
   catch (err) {
     console.error(err);
@@ -314,11 +321,14 @@ attackButton.addEventListener("click", (event) => {
   }
 })
 
-loadClasses();
-
 if (localStorage.getItem("currentGameID") != null) {
   const currentGameID = localStorage.getItem("currentGameID");
   loadGame(currentGameID);
-} else {
-  changeDescriptionClasses();
 }
+
+async function endGame(gameID){
+  localStorage.clear();
+  window.location.reload();
+}
+
+loadClasses();
