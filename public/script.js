@@ -1,10 +1,38 @@
 let classes = {};
 
+let cooldown = false;
+const cooldownTime = 500;
+
 const playerForm = document.getElementById("playerForm");
 const deletePlayerForm = document.getElementById("deletePlayer");
 const moveButton = document.getElementById("moveBTN");
 const attackButton = document.getElementById("attackBTN");
 const classAttributes = document.getElementById("classAttributes");
+const cooldownBar = document.getElementById("cooldownBar");
+
+async function startCooldown() {
+
+  cooldown = true;
+
+  let startTime = Date.now();
+
+  function update() {
+    let elapsed = Date.now() - startTime;
+    let percent = Math.min((elapsed / cooldownTime) * 100, 100);
+
+    cooldownBar.style.width = percent + "%";
+
+    if (percent < 100) {
+      requestAnimationFrame(update);
+    } else {
+      cooldown = false;
+      cooldownBar.style.width = "0%";
+    }
+  }
+
+  requestAnimationFrame(update);
+
+}
 
 async function loadClasses() {
   try {
@@ -43,6 +71,7 @@ function changeDescriptionClasses() {
 
   document.getElementById("classTitle").innerHTML = userclass;
   document.getElementById("classDescription").innerHTML = classData.description;
+  document.getElementById("classImage").innerHTML = "<img src='./img/classes-img/" + (userclass).toLowerCase() + ".png' width='240px' height='306px'>";
 
   const attrList = document.getElementById("classAttributes");
   attrList.innerHTML = "";
@@ -55,18 +84,24 @@ function changeDescriptionClasses() {
 
 function changeDescriptionGame(gameData, playerData) {
 
-  console.log(gameData);
-  console.log(playerData);
-
   document.getElementById("classTitle").innerHTML = playerData.username + " - " + playerData.userclass;
-  document.getElementById("classDescription").innerHTML = "";
+  document.getElementById("classDescription").innerHTML = "Player ID : " + playerData.id;
+  document.getElementById("classImage").innerHTML = "<img src='./img/classes-img/" + (playerData.userclass).toLowerCase() + ".png' width='240px' height='306px'>";
 
   const attrList = document.getElementById("classAttributes");
   attrList.innerHTML = "";
 
-  for (const stat in playerData) {
+  /* for (const stat in playerData) {
     attrList.innerHTML += `<li>${stat.toUpperCase()} : ${playerData[stat]}</li>`;
+  } */
+
+  document.getElementById("currentMonsterName").innerHTML = "Floor " + gameData.current_floor + " - " + gameData.current_monster;
+  if (gameData.current_monster!="Empty") {
+    document.getElementById("currentMonsterStats").innerHTML = "HP : " + gameData.monster_hp + " | ATK : " + gameData.monster_atk + " | DEF : " + gameData.monster_def;
+  } else {
+    document.getElementById("currentMonsterStats").innerHTML = "";
   }
+  
 
 }
 
@@ -114,8 +149,8 @@ async function deletePlayer() {
       method: "DELETE",
     })
     const data = await res.json();
-    alert(data.message);
-    console.log(data);
+    /*alert(data.message);
+    console.log(data);*/
   }
   catch (err) {
     console.error(err);
@@ -146,9 +181,7 @@ async function move(gameID) {
       method: "POST"
     })
     const data = await res.json();
-    if(data.monster){
-      document.getElementById("monsterName").innerHTML = data.monster.name;
-    }
+    loadGame(gameID);
   }
   catch (err) {
     console.error(err);
@@ -162,11 +195,19 @@ async function attack(gameID) {
     const res = await fetch(`http://localhost:3000/games/${gameID}/attack`, {
       method: "POST"
     })
-    const data = await res.json();
   }
   catch (err) {
     console.error(err);
   }
+}
+
+function hurtSprite() {
+  document.getElementById("monsterImage").src = "img/slime1hurt.png";
+  setTimeout(fineSprite, 150);
+}
+
+function fineSprite() {
+  document.getElementById("monsterImage").src = "img/slime1.png";
 }
 
 playerForm.addEventListener("submit", (event) => {
@@ -181,27 +222,27 @@ deletePlayerForm.addEventListener("submit", (event) => {
 
 moveButton.addEventListener("click", (event) => {
   event.preventDefault();
-  move(2);
+  if ((localStorage.getItem("currentGameID") != null) && (!cooldown)) {
+    const currentGameID = localStorage.getItem("currentGameID");
+    move(currentGameID);
+    startCooldown();
+  }
 })
 
 attackButton.addEventListener("click", (event) => {
   event.preventDefault();
-  attack(2);
-  hurtSprite();
+  if ((localStorage.getItem("currentGameID") != null) && (!cooldown)) {
+    const currentGameID = localStorage.getItem("currentGameID");
+    hurtSprite();
+    attack(currentGameID);
+    startCooldown();
+    loadGame(currentGameID);
+  }
 })
-
-function hurtSprite(){
-  document.getElementById("monsterImage").src = "img/slime1hurt.png";
-  setTimeout(fineSprite, 150);
-}
-
-function fineSprite(){
-  document.getElementById("monsterImage").src = "img/slime1.png";
-}
 
 loadClasses();
 
-if(localStorage.getItem("currentGameID")!=null){
+if (localStorage.getItem("currentGameID") != null) {
   const currentGameID = localStorage.getItem("currentGameID");
   loadGame(currentGameID);
 } else {

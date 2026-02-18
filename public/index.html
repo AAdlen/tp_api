@@ -44,6 +44,39 @@
                         </select>
                         <input type="submit" value="Create!" />
                     </form>
+                    <br>
+                    <hr>
+                    <br>
+                    <form id="monsterForm">
+                        <label for="">Monster Name</label>
+                        <br>
+                        <input type="text" placeholder="monsterName" name="monsterName" id="monsterName">
+                        <br>
+                        <br>
+                        <label for="">Sprite</label>
+                        <br>
+                        <input type="text" placeholder="monsterSprite (url)" name="monsterSprite" id="monsterSprite">
+                        <br>
+                        <br>
+                        <label for="">Sprite when hurt</label>
+                        <br>
+                        <input type="text" placeholder="hurtSprite (url)" name="hurtSprite" id="hurtSprite">
+                        <br>
+                        <br>
+                        <label for="">Monster base HP</label>
+                        <input type="number" placeholder="monsterHP" name="monsterHP" id="monsterHP">
+                        <br>
+                        <br>
+                        <label for="">Monster base ATK</label>
+                        <input type="number" placeholder="monsterATK" name="monsterATK" id="monsterATK">
+                        <br>
+                        <br>
+                        <label for="">Monster base DEF</label>
+                        <input type="number" placeholder="monsterDEF" name="monsterDEF" id="monsterDEF">
+                        <input type="submit" value="Create!" />
+                    </form>
+                    <br>
+                    <hr>
                 </div>
 
                 <div id="deletion">
@@ -57,13 +90,11 @@
             </section>
             <section class="container" id="secondcontainer">
                 <div id="roomTitle">
-                    <h2 id="monsterName"></h2>
+                    <h2 id="currentMonsterName"></h2>
+                    <h4 id="currentMonsterStats"></h4>
                 </div>
                 <div id="roomImage">
                     <img src="img/slime1.png" onclick="hurtSprite()" id="monsterImage">
-                </div>
-                <div id="playerHP">
-
                 </div>
                 <div id="actions">
                     <button id="moveBTN" class="actionbutton">
@@ -72,10 +103,14 @@
                     <button id="attackBTN" class="actionbutton">
                         Attack
                     </button>
+                    
+                </div>
+                <div id="cooldownContainer">
+                        <div id="cooldownBar"></div>
                 </div>
 
             </section>
-            <section class="container">
+            <section class="container" id="thirdcontainer">
                 <div>
                     <article>
                         <h3 id="classTitle"></h3>
@@ -86,7 +121,11 @@
 
                         </ul>
                     </article>
+                    
                 </div>
+                <div id="classImage">
+
+                    </div>
             </section>
         </section>
     </section>

@@ -1,7 +1,7 @@
 const classes = {
     Knight: {
         description:
-            "A heavily armored frontline fighter specializing in endurance and defense. Excels at absorbing damage and holding ground in prolonged combat. <br><span>Legend says no hit makes him budge, definitely not a Hollow Knight.</span>",
+            "A heavily armored frontline fighter specializing in endurance and defense. <br><span>Legend says no hit makes him budge, definitely not a Hollow Knight.</span>",
         stats: {
             hp: 50,
             str: 10,

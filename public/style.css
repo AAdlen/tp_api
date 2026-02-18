@@ -87,7 +87,9 @@ body{
 #roomTitle{
     height: 12.5%;
     display: flex;
+    flex-direction: column;
     justify-content: center;
+    align-items: center;
 }
 
 #monsterName{
@@ -95,7 +97,7 @@ body{
 }
 
 #roomImage{
-    height: 75%;
+    height: 70%;
     background-image: url("img/dungeon-bg-2.jpg");
     background-size: cover;
     background-position: center;
@@ -116,14 +118,36 @@ body{
     flex-direction: row;
     align-items: end;
     justify-content: space-around;
-    height: 12.5%;
+    height: 10%;
+    padding-top: 15px;
+}
+
+#cooldownContainer{
+    height: 5%;
+    margin-top: 7px;
+    width: 243px;
+    display: flex;
+    align-items: end;
+    background-color: #9d9c9c;
+}
+
+#cooldownBar{
+    width: 0%;
+    height: 100%;
+    background-color: limegreen;
 }
 
 .actionbutton{
     padding: 0;
     width: 49%;
-    background-color: rgb(231, 255, 231);
+    background-color: rgb(197, 200, 199);
     height: 50px
+}
+
+#thirdcontainer{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 ul{

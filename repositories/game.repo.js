@@ -33,7 +33,8 @@ exports.createGame = async function createGame(req, res) {
             seed: seed,
             currentFloor: 0,
             monster: 'none',
-            monsterStats: null
+            monsterStats: null,
+            lastAction: 0
         };
 
         res.json({ id: gameID });
@@ -52,7 +53,7 @@ exports.getGameById = async function getGameById(req, res) {
             const game = await gameService.getGame(req.params.id);
     
             if (!game) {
-                return res.status(404).send("Player not found");
+                return res.status(404).send("Game not found");
             }
     
             res.json(game);
@@ -67,6 +68,7 @@ exports.getGameById = async function getGameById(req, res) {
 exports.move = async function move(req, res) {
 
     const gameID = req.params.id;
+
     const currentFloor = await getCurrentFloor(gameID);
     await generateNextFloor(gameID, currentFloor);
     const nextMonster = await getMonster(gameID)
@@ -90,12 +92,17 @@ exports.move = async function move(req, res) {
 exports.attack = async function attack(req, res) {
 
     gameID = req.params.id;
+
     const monster = await getMonster(gameID);
     const game = await gameService.getGame(gameID);
     const player = await playerService.getPlayer(game.player_id);
 
     console.log(player);
     console.log(monster);
+
+    res.json({
+        message: "hit !"
+    });
 
 }
 

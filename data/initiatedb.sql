@@ -33,7 +33,21 @@ CREATE TABLE IF NOT EXISTS `games` (
   PRIMARY KEY (`id`),
   KEY `FK__players` (`player_id`),
   CONSTRAINT `FK__players` FOREIGN KEY (`player_id`) REFERENCES `players` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- Data exporting was unselected.
+
+-- Dumping structure for table frogue.monsters
+CREATE TABLE IF NOT EXISTS `monsters` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(250) DEFAULT NULL,
+  `sprite` varchar(250) DEFAULT NULL,
+  `sprite_hurt` varchar(250) DEFAULT NULL,
+  `hp` int DEFAULT (0),
+  `atk` int DEFAULT (0),
+  `def` int DEFAULT (0),
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Data exporting was unselected.
 
@@ -52,7 +66,7 @@ CREATE TABLE IF NOT EXISTS `players` (
   `luck` int DEFAULT NULL,
   `deleted` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT 'no',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Data exporting was unselected.
 
