@@ -81,7 +81,8 @@ exports.move = async function move(req, res) {
             try {
 
                 await db.query('UPDATE games SET status = ? WHERE ID = ?', ["won", gameID]);
-                res.json({ victory: "true" });
+                res.json({ victory: "true", monster: nextMonster });
+                return;
 
             } catch (err) {
 

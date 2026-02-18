@@ -1,7 +1,7 @@
 -- --------------------------------------------------------
--- Host:                         127.0.0.1
--- Server version:               8.4.3 - MySQL Community Server - GPL
--- Server OS:                    Win64
+-- Hôte:                         127.0.0.1
+-- Version du serveur:           8.4.3 - MySQL Community Server - GPL
+-- SE du serveur:                Win64
 -- HeidiSQL Version:             12.8.0.6908
 -- --------------------------------------------------------
 
@@ -15,17 +15,17 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 
--- Dumping database structure for frogue
+-- Listage de la structure de la base pour frogue
 CREATE DATABASE IF NOT EXISTS `frogue` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
 USE `frogue`;
 
--- Dumping structure for table frogue.games
+-- Listage de la structure de table frogue. games
 CREATE TABLE IF NOT EXISTS `games` (
   `id` int NOT NULL AUTO_INCREMENT,
   `player_id` int unsigned NOT NULL,
   `seed` bigint unsigned NOT NULL,
   `current_floor` int unsigned DEFAULT (0),
-  `current_monster` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT 'none',
+  `current_monster` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT (0),
   `monster_hp` int unsigned DEFAULT '0',
   `monster_atk` int unsigned DEFAULT '0',
   `monster_def` int unsigned DEFAULT '0',
@@ -33,11 +33,11 @@ CREATE TABLE IF NOT EXISTS `games` (
   PRIMARY KEY (`id`),
   KEY `FK__players` (`player_id`),
   CONSTRAINT `FK__players` FOREIGN KEY (`player_id`) REFERENCES `players` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Data exporting was unselected.
+-- Les données exportées n'étaient pas sélectionnées.
 
--- Dumping structure for table frogue.monsters
+-- Listage de la structure de table frogue. monsters
 CREATE TABLE IF NOT EXISTS `monsters` (
   `id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(250) DEFAULT NULL,
@@ -49,9 +49,9 @@ CREATE TABLE IF NOT EXISTS `monsters` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Data exporting was unselected.
+-- Les données exportées n'étaient pas sélectionnées.
 
--- Dumping structure for table frogue.players
+-- Listage de la structure de table frogue. players
 CREATE TABLE IF NOT EXISTS `players` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `username` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
@@ -66,9 +66,13 @@ CREATE TABLE IF NOT EXISTS `players` (
   `luck` int DEFAULT NULL,
   `deleted` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT 'no',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Data exporting was unselected.
+INSERT INTO `monsters` (`id`, `name`, `sprite`, `sprite_hurt`, `hp`, `atk`, `def`) VALUES
+	(1, 'Blob', 'https://i.imgur.com/ouEmdyd.png', 'https://i.imgur.com/1GmhmUy.png', 25, 6, 2),
+	(2, 'Blab', 'https://i.imgur.com/4wYrTxb.png', 'https://i.imgur.com/UVDz4Kn.png', 40, 4, 4);
+
+-- Les données exportées n'étaient pas sélectionnées.
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
