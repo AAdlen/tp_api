@@ -50,17 +50,17 @@ exports.createGame = async function createGame(req, res) {
 exports.getGameById = async function getGameById(req, res) {
 
     try {
-            const game = await gameService.getGame(req.params.id);
-    
-            if (!game) {
-                return res.status(404).send("Game not found");
-            }
-    
-            res.json(game);
-        } catch (err) {
-            console.error(err);
-            res.status(500).send("DB error");
+        const game = await gameService.getGame(req.params.id);
+
+        if (!game) {
+            return res.status(404).send("Game not found");
         }
+
+        res.json(game);
+    } catch (err) {
+        console.error(err);
+        res.status(500).send("DB error");
+    }
 }
 
 //Avancer dans la partie
@@ -71,7 +71,7 @@ exports.move = async function move(req, res) {
 
     const currentFloor = await getCurrentFloor(gameID);
     await generateNextFloor(gameID, currentFloor);
-    const nextMonster = await getMonster(gameID)
+    const nextMonster = await getCurrentMonster(gameID)
 
     try {
 
@@ -93,16 +93,34 @@ exports.attack = async function attack(req, res) {
 
     gameID = req.params.id;
 
-    const monster = await getMonster(gameID);
+    const monster = await getCurrentMonster(gameID);
     const game = await gameService.getGame(gameID);
     const player = await playerService.getPlayer(game.player_id);
 
     console.log(player);
     console.log(monster);
 
-    res.json({
-        message: "hit !"
-    });
+    const damage = player.str + player.int;
+
+    if (damage >= monster.hp) {
+        res.json({
+            monster: "killed"
+        });
+    } else {
+        try {
+
+            await db.query('UPDATE games SET monster_hp = ? WHERE ID = ?', [((monster.hp)-(damage)), gameID]);
+            res.json({ damageDealt: damage });
+
+        } catch (err) {
+
+            console.error(err);
+            res.status(500).send('DB error');
+
+        }
+    }
+
+
 
 }
 
@@ -132,12 +150,13 @@ async function getSeed(gameID) {
 
 async function generateNextFloor(gameID, floor) {
 
+    const info = await getMonsterCount()
+    const monsterCount = info.monsterCount['COUNT(*)'];
+
     const seed = await getSeed(gameID);
 
     const rng = seedrandom(seed * floor);
     const roll = (rng() * 100)
-
-    let monsterCount = 3
 
     if (roll > 50) {
         generateMonster(gameID, ((Math.round(roll) % monsterCount) + 1), floor);
@@ -149,26 +168,18 @@ async function generateNextFloor(gameID, floor) {
 
 async function generateMonster(gameID, monsterID, floor) {
 
-    let monster_list = ["Empty", "Zombie", "Skeleton", "Dragon"];
-    let monster = monster_list[monsterID];
-
-    const monsterStats = {
-        hp: 1,
-        atk: 1,
-        def: 1
-    }
+    const monster = await gameService.getMonster(monsterID);
 
     const cache = getCache(gameID);
     cache.monster = monster;
-    cache.monsterStats = monsterStats;
 
     await db.query(
         'UPDATE games SET current_monster = ?, monster_hp = ?, monster_atk = ?, monster_def = ? WHERE ID = ?',
-        [monster, monsterStats.hp, monsterStats.atk, monsterStats.def, gameID]
+        [monster.id, monster.hp, monster.atk, monster.def, gameID]
     );
 }
 
-async function getMonster(gameID) {
+async function getCurrentMonster(gameID) {
 
     const monster = await db.getOne(`SELECT current_monster, monster_hp, monster_atk, monster_def FROM games WHERE ID = ?`, [gameID]);
 
@@ -177,9 +188,22 @@ async function getMonster(gameID) {
     }
 
     return {
-        name: monster.current_monster,
+        id: monster.current_monster,
         hp: monster.monster_hp,
         atk: monster.monster_atk,
         def: monster.monster_def
+    };
+};
+
+async function getMonsterCount() {
+
+    const monsterCount = await db.getOne(`SELECT COUNT(*) FROM monsters`);
+
+    if (!monsterCount) {
+        throw new Error("Error");
+    }
+
+    return {
+        monsterCount
     };
 };

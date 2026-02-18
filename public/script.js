@@ -3,8 +3,11 @@ let classes = {};
 let cooldown = false;
 const cooldownTime = 500;
 
+localStorage.setItem("HURTTHESLIME", true);
+
 const playerForm = document.getElementById("playerForm");
 const deletePlayerForm = document.getElementById("deletePlayer");
+const monsterForm = document.getElementById("monsterForm");
 const moveButton = document.getElementById("moveBTN");
 const attackButton = document.getElementById("attackBTN");
 const classAttributes = document.getElementById("classAttributes");
@@ -43,13 +46,29 @@ async function loadClasses() {
   }
 }
 
+async function loadMonsterFromGame(gameID) {
+  try {
+    const res = await fetch(`/games/${gameID}`);
+    const gameData = await res.json();
+    try {
+      const res = await fetch(`/admin/monsters/${gameData.current_monster}`);
+      const monsterData = await res.json();
+      return monsterData;
+    } catch (err) {
+      console.error("Error loading :", err);
+    }
+  } catch (err) {
+    console.error("Error loading clsses:", err);
+  }
+}
+
 async function loadPlayerFromGame(gameID) {
   try {
     const res = await fetch(`/players/${gameID}`);
     const userData = await res.json();
     return userData;
   } catch (err) {
-    console.error("Error loading classes:", err);
+    console.error("Error loading :", err);
   }
 }
 
@@ -58,9 +77,10 @@ async function loadGame(gameID) {
     const res = await fetch(`/games/${gameID}`);
     const gameData = await res.json();
     const userData = await loadPlayerFromGame(gameID);
-    changeDescriptionGame(gameData, userData);
+    const monsterData = await loadMonsterFromGame(gameID);
+    changeDescriptionGame(gameData, userData, monsterData);
   } catch (err) {
-    console.error("Error loading classes:", err);
+    console.error("Error loading :", err);
   }
 }
 
@@ -82,7 +102,17 @@ function changeDescriptionClasses() {
 
 }
 
-function changeDescriptionGame(gameData, playerData) {
+function changeDescriptionGame(gameData, playerData, monsterData) {
+
+  if(monsterData.name==undefined){
+    monsterData.name = "Empty"
+  }
+
+  if(monsterData.name != "Empty"){
+    localStorage.setItem("monsterInRoom", "true");
+  } else {
+    localStorage.setItem("monsterInRoom", "false");
+  }
 
   document.getElementById("classTitle").innerHTML = playerData.username + " - " + playerData.userclass;
   document.getElementById("classDescription").innerHTML = "Player ID : " + playerData.id;
@@ -91,17 +121,20 @@ function changeDescriptionGame(gameData, playerData) {
   const attrList = document.getElementById("classAttributes");
   attrList.innerHTML = "";
 
-  /* for (const stat in playerData) {
-    attrList.innerHTML += `<li>${stat.toUpperCase()} : ${playerData[stat]}</li>`;
-  } */
+  document.getElementById("currentMonsterName").innerHTML = "Floor " + gameData.current_floor + " - " + monsterData.name;
 
-  document.getElementById("currentMonsterName").innerHTML = "Floor " + gameData.current_floor + " - " + gameData.current_monster;
-  if (gameData.current_monster!="Empty") {
+  if (monsterData.name != "Empty") {
     document.getElementById("currentMonsterStats").innerHTML = "HP : " + gameData.monster_hp + " | ATK : " + gameData.monster_atk + " | DEF : " + gameData.monster_def;
+    localStorage.setItem("currentMonsterSprite", monsterData.sprite)
+    localStorage.setItem("currentMonsterSpriteHurt", monsterData.sprite_hurt)
+    hurtSprite();
   } else {
     document.getElementById("currentMonsterStats").innerHTML = "";
+    localStorage.setItem("currentMonsterSprite", "data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs%3D")
+    localStorage.setItem("currentMonsterSpriteHurt", "data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs%3D")
+    document.getElementById("monsterSpriteImg").src = "data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs%3D";
   }
-  
+
 
 }
 
@@ -173,7 +206,35 @@ async function createGame(playerID) {
   }
 }
 
+async function createMonster() {
+
+  let monsterarray = {
+    name: document.getElementById("monsterName").value,
+    sprite: document.getElementById("monsterSprite").value,
+    spriteHurt: document.getElementById("monsterSpriteHurt").value,
+    hp: document.getElementById("monsterHP").value,
+    atk: document.getElementById("monsterATK").value,
+    def: document.getElementById("monsterDEF").value
+  }
+
+  try {
+
+    const res = await fetch("http://localhost:3000/admin/monsters/", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(monsterarray)
+    })
+    const data = await res.json();
+    alert("Vous venez de créer le monstre numéro #" + data.id + " !");
+  }
+  catch (err) {
+    console.error(err);
+  }
+}
+
 async function move(gameID) {
+
+  localStorage.setItem("HURTTHESLIME", false);
 
   try {
 
@@ -195,6 +256,11 @@ async function attack(gameID) {
     const res = await fetch(`http://localhost:3000/games/${gameID}/attack`, {
       method: "POST"
     })
+    data = await res.json()
+    if(data.monster == "killed"){
+      move(gameID);
+    }
+    loadGame(gameID)
   }
   catch (err) {
     console.error(err);
@@ -202,17 +268,24 @@ async function attack(gameID) {
 }
 
 function hurtSprite() {
-  document.getElementById("monsterImage").src = "img/slime1hurt.png";
-  setTimeout(fineSprite, 150);
+  if(localStorage.getItem("HURTTHESLIME")){
+    document.getElementById("monsterSpriteImg").src = localStorage.getItem("currentMonsterSpriteHurt");
+    setTimeout(fineSprite, 250);
+  }
 }
 
 function fineSprite() {
-  document.getElementById("monsterImage").src = "img/slime1.png";
+  document.getElementById("monsterSpriteImg").src = localStorage.getItem("currentMonsterSprite");
 }
 
 playerForm.addEventListener("submit", (event) => {
   event.preventDefault();
   createPlayer();
+})
+
+monsterForm.addEventListener("submit", (event) => {
+  event.preventDefault();
+  createMonster();
 })
 
 deletePlayerForm.addEventListener("submit", (event) => {
@@ -222,7 +295,7 @@ deletePlayerForm.addEventListener("submit", (event) => {
 
 moveButton.addEventListener("click", (event) => {
   event.preventDefault();
-  if ((localStorage.getItem("currentGameID") != null) && (!cooldown)) {
+  if ((localStorage.getItem("currentGameID") != null) && (!cooldown) && (localStorage.getItem("monsterInRoom") != "true")) {
     const currentGameID = localStorage.getItem("currentGameID");
     move(currentGameID);
     startCooldown();
@@ -231,8 +304,9 @@ moveButton.addEventListener("click", (event) => {
 
 attackButton.addEventListener("click", (event) => {
   event.preventDefault();
-  if ((localStorage.getItem("currentGameID") != null) && (!cooldown)) {
+  if ((localStorage.getItem("currentGameID") != null) && (!cooldown) && (localStorage.getItem("monsterInRoom") != "false")) {
     const currentGameID = localStorage.getItem("currentGameID");
+    localStorage.setItem("HURTTHESLIME", true);
     hurtSprite();
     attack(currentGameID);
     startCooldown();
