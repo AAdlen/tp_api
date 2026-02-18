@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Jacquard+12&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <title>F-ROGUE</title>
+</head>
+
+<body>
+    <section id="fenetre">
+        <section id="title">
+            <div id="title-and-icon">
+                <img src="img/frogue.png">
+                <h3>Frogue</h3>
+            </div>
+            
+            <button id="cross">X</button>
+        </section>
+        <section id="content">
+            <section class="container" id="firstcontainer">
+                <div id="creation">
+                    <form id="playerForm">
+                        <label for="">Username</label>
+                        <br>
+                        <input type="text" placeholder="Username" name="username" id="username">
+                        <br>
+                        <br>
+                        <label for="">Class</label>
+                        <br>
+                        <select name="userclass" id="userclass" onchange="changeDescriptionClasses()">
+                            <option value="Knight">Knight</option>
+                            <option value="Archer">Archer</option>
+                            <option value="Wizard">Wizard</option>
+                            <option value="Bard">Bard</option>
+                            <option value="Healer">Healer</option>
+                            <option value="Necromancer">Necromancer</option>
+                            <option value="Assassin">Assassin</option>
+                            <option value="Jester">Jester</option>
+                        </select>
+                        <input type="submit" value="Create!" />
+                    </form>
+                    <br>
+                    <hr>
+                    <br>
+                    <form id="monsterForm">
+                        <label for="">Monster Name</label>
+                        <br>
+                        <input type="text" placeholder="monsterName" name="monsterName" id="monsterName">
+                        <br>
+                        <br>
+                        <label for="">Sprite</label>
+                        <br>
+                        <input type="text" placeholder="monsterSprite (url)" name="monsterSprite" id="monsterSprite">
+                        <br>
+                        <br>
+                        <label for="">Sprite when hurt</label>
+                        <br>
+                        <input type="text" placeholder="monsterSpriteHurt (url)" name="monsterSpriteHurt" id="monsterSpriteHurt">
+                        <br>
+                        <br>
+                        <label for="">Monster base HP</label>
+                        <input type="number" placeholder="monsterHP" name="monsterHP" id="monsterHP">
+                        <br>
+                        <br>
+                        <label for="">Monster base ATK</label>
+                        <input type="number" placeholder="monsterATK" name="monsterATK" id="monsterATK">
+                        <br>
+                        <br>
+                        <label for="">Monster base DEF</label>
+                        <input type="number" placeholder="monsterDEF" name="monsterDEF" id="monsterDEF">
+                        <input type="submit" value="Create!" />
+                    </form>
+                    <br>
+                    <hr>
+                </div>
+
+                <div id="deletion">
+                    <form id="deletePlayer">
+                        <label for="id">Enter a player ID to delete</label>
+                        <input type="number" id="playerID">
+                        <input type="submit" value="Delete!" id="">
+
+                    </form>
+                </div>
+            </section>
+            <section class="container" id="secondcontainer">
+                <div id="roomTitle">
+                    <h2 id="currentMonsterName">Create a character to start !</h2>
+                    <h4 id="currentMonsterStats"></h4>
+                </div>
+                <div id="roomImage">
+                    <img src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs%3D"  id="monsterSpriteImg">
+                </div>
+                <div id="actions">
+                    <button id="moveBTN" class="actionbutton">
+                        Move
+                    </button>
+                    <button id="attackBTN" class="actionbutton">
+                        Attack
+                    </button>
+                    
+                </div>
+                <div id="cooldownContainer">
+                        <div id="cooldownBar"></div>
+                </div>
+
+            </section>
+            <section class="container" id="thirdcontainer">
+                <div>
+                    <article>
+                        <h3 id="classTitle"></h3>
+                        <br>
+                        <p id="classDescription"></p>
+                        <br>
+                        <ul id="classAttributes">
+
+                        </ul>
+                    </article>
+                    
+                </div>
+                <div id="classImage">
+
+                    </div>
+            </section>
+        </section>
+    </section>
+</body>
+<script src="script.js"></script>
+
+</html>

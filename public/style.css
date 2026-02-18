@@ -1,0 +1,167 @@
+*{
+    box-sizing: border-box;
+    margin: 0;
+}
+
+body{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100vh;
+    background-image: url("img/background.jpeg");
+    background-size: cover;
+}
+
+#fenetre{
+    display: flex;
+    flex-direction: column;
+    width: 800px;
+    height: 600px;
+    border: 3px solid rgb(0, 61, 215);
+}
+
+#title{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    height: 5%;
+    background: linear-gradient(rgb(9, 151, 255), rgb(0, 83, 238) 8%, rgb(0, 80, 238) 40%, rgb(0, 102, 255) 88%, rgb(0, 102, 255) 93%, rgb(0, 91, 255) 95%, rgb(0, 61, 215) 96%, rgb(0, 61, 215));
+    color: white;
+    align-items: center;
+    padding-left: 10px;
+    padding-right: 5px;
+}
+
+#title-and-icon{
+    display: flex;
+    height: 100%;
+    width: 100%;
+    align-items: center;
+}
+
+#title-and-icon img{
+    display: flex;
+    height: 25px;
+    width: 25px;
+    margin-right: 5px;
+}
+
+#cross{
+    background-color: rgb(240, 89, 89);
+    color: white;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#content{
+    display: flex;
+    width: 100%;
+    height: 95%;
+    background-color: #fafafa;
+}
+
+.container{
+    width: calc(100% / 3);
+    height: 100%;
+    padding: 10px;
+}
+
+#firstcontainer{
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    border-right: 1px solid rgb(92, 88, 88);
+}
+
+#secondcontainer{
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    border-right: 1px solid rgb(92, 88, 88);
+}
+
+#roomTitle{
+    height: 12.5%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#monsterName{
+    font-style: normal;
+}
+
+#roomImage{
+    height: 70%;
+    background-image: url("img/dungeon-bg-2.jpg");
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    justify-content: center;
+    align-items: end;
+    border: 5px solid grey;
+}
+
+#roomImage img{
+    object-fit: cover;
+    width: 100%;
+    height: 50%;
+}
+
+#actions{
+    display: flex;
+    flex-direction: row;
+    align-items: end;
+    justify-content: space-around;
+    height: 10%;
+    padding-top: 15px;
+}
+
+#currentMonsterName{
+    text-align: center;
+}
+
+#cooldownContainer{
+    height: 5%;
+    margin-top: 7px;
+    width: 243px;
+    display: flex;
+    align-items: end;
+    background-color: #9d9c9c;
+}
+
+#cooldownBar{
+    width: 0%;
+    height: 100%;
+    background-color: limegreen;
+}
+
+.actionbutton{
+    padding: 0;
+    width: 49%;
+    background-color: rgb(197, 200, 199);
+    height: 50px
+}
+
+#thirdcontainer{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+ul{
+    padding: 0;
+}
+
+li{
+    list-style-type: none;
+}
+
+span{
+    font-style: italic;
+}
